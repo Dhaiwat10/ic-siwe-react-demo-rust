@@ -40,7 +40,11 @@ upgrade-provider:
 	dfx generate ic_siwe_provider
 
 deploy-backend:
-	dfx deploy backend
+	dfx deploy backend --argument "( \
+	    record { \
+		      ic_siwe_provider = \"$$(dfx canister id ic_siwe_provider)\"; \
+	    } \
+	)"
 	dfx generate backend
 
 deploy-frontend:

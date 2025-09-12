@@ -1,4 +1,5 @@
 export const idlFactory = ({ IDL }) => {
+  const SettingsInput = IDL.Record({ 'ic_siwe_provider' : IDL.Text });
   const UserProfile = IDL.Record({
     'avatar_url' : IDL.Text,
     'name' : IDL.Text,
@@ -28,4 +29,7 @@ export const idlFactory = ({ IDL }) => {
       ),
   });
 };
-export const init = ({ IDL }) => { return []; };
+export const init = ({ IDL }) => {
+  const SettingsInput = IDL.Record({ 'ic_siwe_provider' : IDL.Text });
+  return [SettingsInput];
+};

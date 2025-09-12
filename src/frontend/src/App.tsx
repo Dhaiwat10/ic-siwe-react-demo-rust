@@ -3,8 +3,22 @@ import EditProfile from "./components/profile/EditProfile";
 import Header from "./components/header/Header";
 import { NoProfileMessage } from "./components/profile/NoProfileMessage";
 import GitHubIcon from "./components/GitHubIcon";
+import { useSiwe } from "ic-siwe-js/react";
+import { useBackend } from "./main";
+import { useEffect } from "react";
 
 function App() {
+  const { authenticate, isInitializing } = useBackend();
+  const { identity } = useSiwe();
+
+  // Authenticated the backend actor when the identity is available and
+  // the useBackend hook is Finished initializing.
+  useEffect(() => {
+    if (identity && !isInitializing) {
+      authenticate(identity);
+    }
+  }, [identity, authenticate, isInitializing]);
+
   return (
     <div className="flex flex-col items-center w-full">
       <Header />

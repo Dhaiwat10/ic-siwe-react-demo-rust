@@ -1,6 +1,10 @@
 type Name = text;
 type AvatarUrl = text;
 
+type SettingsInput = record {
+  ic_siwe_provider : text;
+};
+
 type UserProfile = record {
   address : text;
   name : text;
@@ -22,7 +26,7 @@ type ListProfilesResponse = variant {
   Err : text;
 };
 
-service : () -> {
+service : (settings_input : SettingsInput) -> {
   "get_my_profile" : () -> (GetMyProfileResponse) query;
   "save_my_profile" : (Name, AvatarUrl) -> (SaveMyProfileResponse);
   "list_profiles" : () -> (ListProfilesResponse) query;

@@ -4,23 +4,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProfileCard from "./ProfileCard";
 import { UserProfile } from "../../../../backend/declarations/backend.did";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
-import { useActor } from "../../ic/Actors";
+import { useBackend } from "../../main";
 
 export default function AllProfiles() {
   const [profiles, setProfiles] = useState<[string, UserProfile][]>([]);
   const [loading, setLoading] = useState(true);
-  const { actor } = useActor();
+  const { actor: backend } = useBackend();
 
   useEffect(() => {
-    if (!actor) return;
+    if (!backend) return;
     (async () => {
-      const response = await actor.list_profiles();
+      const response = await backend.list_profiles();
       if (response && "Ok" in response) {
         setProfiles(response.Ok);
       }
       setLoading(false);
     })();
-  }, [actor]);
+  }, [backend]);
 
   return (
     <div className="w-full max-w-2xl border-zinc-700/50 border-[1px] bg-zinc-900 px-5 py-5 drop-shadow-xl rounded-3xl flex flex-col items-center">

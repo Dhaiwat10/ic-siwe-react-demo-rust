@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 
-import { useActor } from "../../ic/Actors";
 import { useAccount } from "wagmi";
 import AddressPill from "../AddressPill";
 import PrincipalPill from "../PrincipalPill";
 import { useSiwe } from "ic-siwe-js/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLeftRight } from "@fortawesome/free-solid-svg-icons";
+import { useBackend } from "../../main";
 
 export function NoProfileMessage() {
-  const { actor } = useActor();
+  const { actor: backend, isAuthenticated } = useBackend();
   const { address } = useAccount();
   const { identity } = useSiwe();
 
@@ -19,8 +19,8 @@ export function NoProfileMessage() {
 
   useEffect(() => {
     (async () => {
-      if (!actor) return;
-      const response = await actor.get_my_profile();
+      if (!backend || !isAuthenticated) return;
+      const response = await backend.get_my_profile();
       if (response && "Ok" in response) {
         if (response.Ok.name === "No Name") {
           setHasProfile(false);
@@ -30,7 +30,7 @@ export function NoProfileMessage() {
       }
       setLoading(false);
     })();
-  }, [actor]);
+  }, [backend, isAuthenticated]);
 
   if (loading || hasProfile) return null;
 

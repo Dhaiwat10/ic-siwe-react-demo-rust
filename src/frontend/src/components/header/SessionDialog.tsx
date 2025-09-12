@@ -9,8 +9,7 @@ type SessionDialogProps = {
   setIsOpen: (isOpen: boolean) => void;
 };
 
-function arrayBufferToHex(arrayBuffer: ArrayBuffer): string {
-  const byteArray = new Uint8Array(arrayBuffer);
+function arrayToHexString(byteArray: Uint8Array): string {
   return Array.from(byteArray, (byte) =>
     byte.toString(16).padStart(2, "0"),
   ).join("");
@@ -30,7 +29,7 @@ export default function SessionDialog({
       <div className="px-4 py-2 text-xs rounded-lg text-zinc-400 bg-zinc-900/50">
         <pre>
           {delegationChain?.delegations.map((delegation) => {
-            const pubKey = arrayBufferToHex(delegation.delegation.pubkey);
+            const pubKey = arrayToHexString(delegation.delegation.pubkey);
             const expiration = new Date(
               Number(delegation.delegation.expiration / 1000000n),
             );

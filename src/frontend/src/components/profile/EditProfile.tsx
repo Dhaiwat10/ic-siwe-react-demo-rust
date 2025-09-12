@@ -4,7 +4,7 @@ import Button from "../ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
-import { useActor } from "../../ic/Actors";
+import { useBackend } from "../../main";
 
 type EditProfileProps = {
   className?: string;
@@ -15,7 +15,7 @@ export default function EditProfile({
   className,
   allwaysShow,
 }: EditProfileProps) {
-  const { actor } = useActor();
+  const { actor: backend, isAuthenticated } = useBackend();
 
   // Local state
   const [name, setName] = useState("");
@@ -26,8 +26,9 @@ export default function EditProfile({
 
   useEffect(() => {
     (async () => {
-      if (!actor) return;
-      const response = await actor.get_my_profile();
+      console.log("isAuthenticated", isAuthenticated);
+      if (!backend || !isAuthenticated) return;
+      const response = await backend.get_my_profile();
       if (response && "Ok" in response) {
         setName(response.Ok.name);
         setAvatarUrl(response.Ok.avatar_url);
@@ -39,7 +40,7 @@ export default function EditProfile({
       }
       setLoading(false);
     })();
-  }, [actor]);
+  }, [backend, isAuthenticated]);
 
   // Don't render if we already have a profile unless allwaysShow is true
   if (hasProfile && !allwaysShow) return null;
@@ -59,9 +60,9 @@ export default function EditProfile({
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!actor) return;
+    if (!backend) return;
     setSaving(true);
-    const response = await actor.save_my_profile(name, avatarUrl);
+    const response = await backend.save_my_profile(name, avatarUrl);
 
     if (response && "Ok" in response) {
       toast.success("Profile saved");

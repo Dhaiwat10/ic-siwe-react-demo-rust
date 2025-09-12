@@ -10,6 +10,7 @@ export type ListProfilesResponse = { 'Ok' : Array<[string, UserProfile]> } |
 export type Name = string;
 export type SaveMyProfileResponse = { 'Ok' : UserProfile } |
   { 'Err' : string };
+export interface SettingsInput { 'ic_siwe_provider' : string }
 export interface UserProfile {
   'avatar_url' : string,
   'name' : string,
